@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:translator="clr-namespace:Translator;assembly=Translator"
+             xmlns:renderers="clr-namespace:Translator.Renderers;assembly=Translator"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             x:Class="Translator.Views.MainPage"
+             Title="{Binding Title}"
+             FlowDirection="LeftToRight">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelLang" TargetType="Label">
+                <Setter Property="Margin" Value="0,10,0,10"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="TextColor" Value="#1976D2"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="BoxViewStyle" TargetType="BoxView">
+                <Setter Property="Color" Value="#E0E0E0"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid 
+        x:Name="TranslationGrid" 
+        RowSpacing="0" ColumnSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid 
+            RowSpacing="0" ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label 
+                Grid.Row="0" Grid.Column="0"
+                Style="{StaticResource LabelLang}"
+                Text="{Binding Original.Value}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SetOriginalLanguageCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <ffSvg:SvgCachedImage x:Name="SvgCachedImage"
+                Grid.Row="0" Grid.Column="1"
+                Margin="10"
+                Rotation="90"
+                Source="importExport.svg">
+                <ffSvg:SvgCachedImage.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RotateImageCommand}"
+                                          CommandParameter="{x:Reference SvgCachedImage}"/>
+                </ffSvg:SvgCachedImage.GestureRecognizers>
+            </ffSvg:SvgCachedImage>
+            <Label 
+                Grid.Row="0" Grid.Column="2"
+                Style="{StaticResource LabelLang}"
+                Text="{Binding Translate.Value}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SetTranslateLanguageCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <BoxView 
+                Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0"
+                Style="{StaticResource BoxViewStyle}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" x:Name="ReactGrid" 
+              RowSpacing="0" ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.2*"/>
+            </Grid.ColumnDefinitions>
+    
+            <renderers:CleanEditor 
+                Grid.Row="0" Grid.Column="0"
+                Text="{Binding TextToTranslate}" 
+                Placeholder="Input..."
+                HorizontalOptions="FillAndExpand"
+                OnFocusedCommand="{Binding FocusedCommand}"
+                OnUnFocusedCommand="{Binding UnFocusedCommand}"/>
+            <ffSvg:SvgCachedImage 
+                Grid.Row="0" Grid.Column="1"
+                Margin="6"
+                Source="brightness.svg">
+                <ffSvg:SvgCachedImage.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TranslateCommand}"/>
+                </ffSvg:SvgCachedImage.GestureRecognizers>
+                
+            </ffSvg:SvgCachedImage>
+            <BoxView 
+                Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"
+                Style="{StaticResource BoxViewStyle}"
+                Margin="0"/>
+            <Label 
+                Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0"
+                HorizontalOptions="FillAndExpand"
+                Text="{Binding Translation}"/>
+        </Grid>
+    </Grid>
+
+</ContentPage>

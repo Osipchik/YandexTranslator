@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:renderers="clr-namespace:Translator.Renderers;assembly=Translator"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="Translator.Views.SelectLanguagePage">
+
+    <renderers:ClickAbleListView
+        ItemsSource="{Binding Languages.Langs}"
+        ItemClickCommand="{Binding ItemClickCommand}"
+        SelectionMode="None">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <TextCell Text="{Binding Value}" Detail="{Binding Key}"/>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </renderers:ClickAbleListView>
+</ContentPage>
