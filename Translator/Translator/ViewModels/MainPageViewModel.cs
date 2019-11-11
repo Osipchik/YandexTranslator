@@ -5,22 +5,11 @@ using System.Threading.Tasks;
 using FFImageLoading.Svg.Forms;
 using Prism.Services;
 using Translator.Models;
-using Translator.Translator;
 using Xamarin.Forms;
+using YandexTranslator;
 
 namespace Translator.ViewModels
 {
-    public enum Code
-    {
-        Ok = 200,
-        WrongKey = 401,
-        ApiBlocked = 402,
-        Limit = 404,
-        Size = 413,
-        CantTranslate = 422,
-        IsNotSupported = 501
-    }
-
     public class MainPageViewModel : ViewModelBase
     {
         private string _culture;
@@ -54,6 +43,7 @@ namespace Translator.ViewModels
             set => SetProperty(ref _textToTranslate, value);
         }
 
+        private YandexTranslator.YandexTranslator translator;
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialog)
             :base(navigationService)
@@ -72,6 +62,7 @@ namespace Translator.ViewModels
             _culture = settings.Culture;
             Original = settings.OriginalLang;
             Translate = settings.TranslateLang;
+            translator = new YandexTranslator.YandexTranslator((string)Application.Current.Resources["ApiKey"], _culture);
         }
 
         public DelegateCommand<SvgCachedImage> RotateImageCommand { get; }
@@ -94,33 +85,32 @@ namespace Translator.ViewModels
 
         private async void ToSelectLanguagePage(string key)
         {
-            var parameters = new NavigationParameters{{LanguageKey, key}, {Constants.CultureKey, _culture}};
+            var parameters = new NavigationParameters{{LanguageKey, key}, {LanguagesKey, translator.Languages}};
             await NavigationService.NavigateAsync(SelectLanguagePageKey, parameters);
         }
 
         private async void TranslateText()
         {
-            if (!string.IsNullOrEmpty(TextToTranslate))
-            {
-                var translation = await YandexTranslator.TranslateTextAsync(TextToTranslate, Original.Key + "-" + Translate.Key);
+            if (!string.IsNullOrEmpty(TextToTranslate)){
+                var translation = await translator.TranslateTextAsync(TextToTranslate, Original.Key, Translate.Key);
                 switch (translation.Code)
                 {
-                    case (int)Code.Ok:
+                    case (int)YandexCode.Ok:
                         Translation = string.Join(" ", translation.Text);
                         break;
-                    case (int)Code.WrongKey:
+                    case (int)YandexCode.WrongKey:
                         await _pageDialog.DisplayAlertAsync("warning", "wrong API key", "close");
                         break;
-                    case (int)Code.ApiBlocked:
+                    case (int)YandexCode.ApiBlocked:
                         await _pageDialog.DisplayAlertAsync("warning", "API is blocked", "close");
                         break;
-                    case (int)Code.IsNotSupported:
+                    case (int)YandexCode.IsNotSupported:
                         await _pageDialog.DisplayAlertAsync("warning", "We cannot translate into this language", "close");
                         break;
-                    case (int)Code.Limit:
+                    case (int)YandexCode.Limit:
                         await _pageDialog.DisplayAlertAsync("warning", "Limit of translation", "close");
                         break;
-                    case (int)Code.Size:
+                    case (int)YandexCode.Size:
                         await _pageDialog.DisplayAlertAsync("warning", "The text is too long (> 10000)", "close");
                         break;
                     default:

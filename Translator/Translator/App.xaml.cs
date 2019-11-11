@@ -3,7 +3,6 @@ using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
 using Translator.Models;
-using Translator.Translator;
 using Translator.ViewModels;
 using Translator.Views;
 using Xamarin.Forms;
@@ -22,7 +21,7 @@ namespace Translator
         {
             InitializeComponent();
 
-            YandexTranslator.SetAvailableLanguages("ru");
+            //YandexTranslator.SetAvailableLanguages("ru");
 
             var asd = new Settings
             {

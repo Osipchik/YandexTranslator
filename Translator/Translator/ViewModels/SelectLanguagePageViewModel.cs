@@ -1,7 +1,7 @@
-﻿using Prism.Commands;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Prism.Commands;
 using Prism.Navigation;
-using Translator.Models;
-using Translator.Translator;
 
 namespace Translator.ViewModels
 {
@@ -9,8 +9,8 @@ namespace Translator.ViewModels
     {
         private string _selectLanguageKey;
 
-        private static AvailableLanguages _languages;
-        public AvailableLanguages Languages
+        private static IDictionary<string, string> _languages;
+        public IDictionary<string, string> Languages
         {
             get => _languages;
             set => SetProperty(ref _languages, value);
@@ -19,7 +19,6 @@ namespace Translator.ViewModels
         public SelectLanguagePageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
-            Languages = YandexTranslator.Languages;
             ItemClickCommand = new DelegateCommand<object>((item) => Command(item));
         }
 
@@ -31,9 +30,13 @@ namespace Translator.ViewModels
             await NavigationService.GoBackAsync(navigationParameters);
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public override async void OnNavigatedTo(INavigationParameters parameters)
         {
-            _selectLanguageKey = parameters.GetValue<string>(LanguageKey);
+            await Task.Run(() =>
+            {
+                _selectLanguageKey = parameters.GetValue<string>(LanguageKey);
+                Languages = parameters.GetValue<IDictionary<string, string>>(LanguagesKey);
+            });
         }
     }
 }

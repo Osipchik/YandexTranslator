@@ -6,6 +6,7 @@ namespace Translator.ViewModels
     public class ViewModelBase : BindableBase, IInitialize, INavigationAware, IDestructible
     {
         protected const string LanguageKey = "language";
+        protected const string LanguagesKey = "languages";
         protected const string SelectLanguagePageKey = "SelectLanguagePage";
 
         protected INavigationService NavigationService { get; private set; }

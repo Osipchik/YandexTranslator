@@ -45,7 +45,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label 
+            <Label x:Name="LabelOriginal"
                 Grid.Row="0" Grid.Column="0"
                 Style="{StaticResource LabelLang}"
                 Text="{Binding Original.Value}">
@@ -53,17 +53,17 @@
                     <TapGestureRecognizer Command="{Binding SetOriginalLanguageCommand}"/>
                 </Label.GestureRecognizers>
             </Label>
-            <ffSvg:SvgCachedImage x:Name="SvgCachedImage"
+            <ffSvg:SvgCachedImage x:Name="SwapLanguageImage"
                 Grid.Row="0" Grid.Column="1"
                 Margin="10"
                 Rotation="90"
                 Source="importExport.svg">
                 <ffSvg:SvgCachedImage.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding RotateImageCommand}"
-                                          CommandParameter="{x:Reference SvgCachedImage}"/>
+                                          CommandParameter="{x:Reference SwapLanguageImage}"/>
                 </ffSvg:SvgCachedImage.GestureRecognizers>
             </ffSvg:SvgCachedImage>
-            <Label 
+            <Label x:Name="LabelTranslate"
                 Grid.Row="0" Grid.Column="2"
                 Style="{StaticResource LabelLang}"
                 Text="{Binding Translate.Value}">
@@ -94,8 +94,8 @@
                 Text="{Binding TextToTranslate}" 
                 Placeholder="Input..."
                 HorizontalOptions="FillAndExpand"
-                OnFocusedCommand="{Binding FocusedCommand}"
-                OnUnFocusedCommand="{Binding UnFocusedCommand}"/>
+                Focused="Editor_OnFocused"
+                Unfocused="Editor_OnUnfocused"/>
             <ffSvg:SvgCachedImage 
                 Grid.Row="0" Grid.Column="1"
                 Margin="6"

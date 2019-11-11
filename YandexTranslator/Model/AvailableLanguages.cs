@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Translator.Models
+namespace YandexTranslator.Model
 {
     public class AvailableLanguages
     {

@@ -4,8 +4,6 @@
              xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="Translator.App">
 	<Application.Resources>
-
-		<!-- Application resource dictionary -->
-
+        <x:String x:Key="ApiKey"></x:String>
 	</Application.Resources>
 </prism:PrismApplication>
